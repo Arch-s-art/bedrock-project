@@ -113,7 +113,7 @@ resource "aws_bedrockagent_knowledge_base" "main" {
   storage_configuration {
     type = "RDS"
     rds_configuration {
-      credentials_secret_arn = var.aurora_secret_arn
+     credentials_secret_arn = var.aurora_secret_arn
       database_name = var.aurora_db_name
       resource_arn = var.aurora_arn
       table_name = var.aurora_table_name

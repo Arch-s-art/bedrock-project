@@ -13,8 +13,8 @@ resource "aws_rds_cluster" "aurora_serverless" {
   allow_major_version_upgrade = true
 
   serverlessv2_scaling_configuration {
-    max_capacity             = var.max_capacity
-    min_capacity             = var.min_capacity
+    max_capacity = var.max_capacity
+    min_capacity = var.min_capacity
   }
 
   vpc_security_group_ids = [aws_security_group.aurora_sg.id]
@@ -37,16 +37,29 @@ resource "aws_db_subnet_group" "aurora" {
   }
 }
 
+# --------------------------------------------------
+# ⭐ Security group with public IP access (updated)
+# --------------------------------------------------
 resource "aws_security_group" "aurora_sg" {
   name        = "${var.cluster_identifier}-sg"
   description = "Security group for Aurora Serverless"
   vpc_id      = var.vpc_id
 
+  # Existing ingress (used by VPC resources)
   ingress {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
     cidr_blocks = var.allowed_cidr_blocks
+  }
+
+  # Local laptop access using your public IP
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["106.215.181.149/32"]
+    description = "Allow local machine to connect"
   }
 
   egress {
@@ -61,15 +74,18 @@ resource "aws_security_group" "aurora_sg" {
   }
 }
 
-# New resources for secret management
+# --------------------------------------------------
+# Secret manager resources
+# --------------------------------------------------
+
 resource "random_password" "master_password" {
   length  = 16
   special = true
 }
 
 resource "aws_secretsmanager_secret" "aurora_secret" {
-  name = "${var.cluster_identifier}"
-  recovery_window_in_days = 0
+  name                     = "${var.cluster_identifier}"
+  recovery_window_in_days  = 0
 }
 
 resource "aws_secretsmanager_secret_version" "aurora_secret_version" {
