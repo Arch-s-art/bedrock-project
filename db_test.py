@@ -3,7 +3,7 @@ import boto3
 import json
 
 # --- Secrets Manager ARN from Stack1 ---
-secret_arn = "arn:aws:secretsmanager:us-west-2:490555583216:secret:my-aurora-serverless-edgRd4"
+secret_arn = "arn:aws:secretsmanager:us-west-2:490555583216:secret:my-aurora-serverless-2WsA5v"
 region_name = "us-west-2"
 
 # --- Fetch secret from AWS Secrets Manager ---
@@ -16,11 +16,11 @@ except Exception as e:
     exit(1)
 
 # --- Database connection parameters ---
-DB_HOST = secret_dict["host"]
-DB_NAME = secret_dict["db"]         # your DB name, "myapp"
-DB_USER = secret_dict["username"]   # "dbadmin"
-DB_PASSWORD = secret_dict["password"]
-DB_PORT = secret_dict["port"]       # usually 5432
+DB_HOST = secret_dict["host"]          # Aurora endpoint
+DB_NAME = secret_dict["db"]            # "myapp"
+DB_USER = secret_dict["username"]      # "dbadmin"
+DB_PASSWORD = secret_dict["password"]  # password from secret
+DB_PORT = secret_dict["port"]          # 5432
 
 # --- Connect to Aurora PostgreSQL ---
 try:
