@@ -3,7 +3,7 @@ import boto3
 import json
 
 # --- Secrets Manager ARN from Stack1 ---
-secret_arn = "arn:aws:secretsmanager:us-west-2:490555583216:secret:my-aurora-serverless-2WsA5v"
+secret_arn = "arn:aws:secretsmanager:us-west-2:490555583216:secret:my-aurora-serverless-XR5gjR"
 region_name = "us-west-2"
 
 # --- Fetch secret from AWS Secrets Manager ---
